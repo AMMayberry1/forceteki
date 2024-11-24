@@ -34,9 +34,9 @@ export default class WatTamborTechnoUnionForeman extends LeaderUnitCard {
     protected override setupLeaderUnitSideAbilities() {
         this.addOnAttackAbility({
             title: 'If a friendly unit was defeated this phase, give a unit +2/+2 for this phase',
+            optional: true,
             targetResolver: {
                 cardTypeFilter: WildcardCardType.Unit,
-                optional: true,
                 cardCondition: (card, context) => card !== context.source,
                 immediateEffect: this.getWatTamborEffect(),
             }

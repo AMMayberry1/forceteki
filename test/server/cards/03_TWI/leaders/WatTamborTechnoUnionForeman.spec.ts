@@ -103,7 +103,7 @@ describe('Wat Tambor, Techno Union Foreman', function () {
                 context.player1.clickCard(context.watTambor);
                 context.player1.clickCard(context.p2Base);
                 expect(context.player1).toBeAbleToSelectExactly([context.battlefieldMarine, context.greenSquadronAwing, context.admiralYularen, context.allianceDispatcher]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
 
                 // give +2/+2 to battlefield marine
                 context.player1.clickCard(context.battlefieldMarine);

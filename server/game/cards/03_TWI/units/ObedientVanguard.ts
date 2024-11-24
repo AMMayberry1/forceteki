@@ -13,8 +13,8 @@ export default class ObedientVanguard extends NonLeaderUnitCard {
     public override setupCardAbilities() {
         this.addWhenDefeatedAbility({
             title: 'Give a Trooper unit +2/+2 for this phase',
+            optional: true,
             targetResolver: {
-                optional: true,
                 cardCondition: (card) => card.isUnit() && card.hasSomeTrait(Trait.Trooper),
                 immediateEffect: AbilityHelper.immediateEffects.forThisPhaseCardEffect({
                     effect: AbilityHelper.ongoingEffects.modifyStats({ power: 2, hp: 2 })

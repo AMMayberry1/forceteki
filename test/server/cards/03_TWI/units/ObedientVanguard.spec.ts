@@ -26,7 +26,7 @@ describe('Obedient Vanguard', function () {
                 context.player2.clickCard(context.obedientVanguard);
 
                 expect(context.player1).toBeAbleToSelectExactly([context.battlefieldMarine, context.wildernessFighter]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
 
                 context.player1.clickCard(context.battlefieldMarine);
                 expect(context.battlefieldMarine.getPower()).toBe(5);
