@@ -5,7 +5,7 @@ describe('Chewbacca, Loyal Companion', function() {
                 contextRef.setupTest({
                     phase: 'action',
                     player1: {
-                        groundArena: ['specforce-soldier', 'alliance-dispatcher']
+                        groundArena: ['specforce-soldier', 'cantina-braggart']
                     },
                     player2: {
                         groundArena: [{ card: 'chewbacca#loyal-companion', exhausted: true }]
@@ -25,7 +25,7 @@ describe('Chewbacca, Loyal Companion', function() {
                 context.player2.clickCard(context.p1Base);
                 expect(context.chewbacca.exhausted).toBe(true);
 
-                context.player1.clickCard(context.allianceDispatcher);
+                context.player1.clickCard(context.cantinaBraggart);
                 expect(context.chewbacca.exhausted).toBe(false);
             });
         });

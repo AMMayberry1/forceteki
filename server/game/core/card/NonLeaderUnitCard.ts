@@ -18,7 +18,7 @@ export class NonLeaderUnitCard extends NonLeaderUnitCardParent {
         // superclasses check that we are a unit, check here that we are a non-leader unit
         Contract.assertFalse(this.printedType === CardType.Leader);
 
-        this.defaultActions.push(new PlayUnitAction(this));
+        this.defaultActions.push(new PlayUnitAction({ card: this }));
     }
 
     public override isNonLeaderUnit(): this is NonLeaderUnitCard {
@@ -29,7 +29,7 @@ export class NonLeaderUnitCard extends NonLeaderUnitCardParent {
         const actions = super.getActions();
 
         if (this.zoneName === ZoneName.Resource && this.hasSomeKeyword(KeywordName.Smuggle)) {
-            actions.push(new PlayUnitAction(this, PlayType.Smuggle));
+            actions.push(new PlayUnitAction({ card: this, playType: PlayType.Smuggle }));
         }
         return actions;
     }

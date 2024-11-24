@@ -13,9 +13,9 @@ export default class BountyGuildInitiate extends NonLeaderUnitCard {
     public override setupCardAbilities () {
         this.addWhenPlayedAbility({
             title: 'Deal 2 damage to a ground unit if you control another Bounty Hunter unit',
+            optional: true,
             targetResolver: {
                 zoneFilter: ZoneName.GroundArena,
-                optional: true,
                 immediateEffect: AbilityHelper.immediateEffects.conditional({
                     condition: (context) => context.source.controller.isTraitInPlay(Trait.BountyHunter, context.source),
                     onTrue: AbilityHelper.immediateEffects.damage({ amount: 2 }),

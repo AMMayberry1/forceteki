@@ -20,7 +20,7 @@ export class EventCard extends EventCardParent {
         super(owner, cardData);
         Contract.assertEqual(this.printedType, CardType.Event);
 
-        this.defaultActions.push(new PlayEventAction(this));
+        this.defaultActions.push(new PlayEventAction({ card: this }));
 
         Contract.assertNotNullLike(this._eventAbility, 'Event card\'s ability was not initialized');
 
@@ -38,7 +38,7 @@ export class EventCard extends EventCardParent {
         const actions = super.getActions();
 
         if (this.zoneName === ZoneName.Resource && this.hasSomeKeyword(KeywordName.Smuggle)) {
-            actions.push(new PlayEventAction(this, PlayType.Smuggle));
+            actions.push(new PlayEventAction({ card: this, playType: PlayType.Smuggle }));
         }
         return actions;
     }

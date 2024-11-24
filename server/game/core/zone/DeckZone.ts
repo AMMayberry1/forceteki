@@ -85,7 +85,7 @@ export class DeckZone extends ZoneAbstract<TokenOrPlayableCard> implements IAddR
     }
 
     public shuffle() {
-        Helpers.shuffle(this.deck);
+        this.deck = Helpers.shuffle(this.deck);
     }
 
     protected override checkZoneMatches(card: Card, zone: MoveZoneDestination | null) {

@@ -30,7 +30,7 @@ describe('Zeb Orrelios, Headstrong Warrior', function () {
                 context.player1.clickCard(context.superlaserTechnician);
                 context.player2.clickPrompt('Put Superlaser Technician into play as a resource and ready it');
                 expect(context.player1).toBeAbleToSelectExactly([context.zebOrrelios, context.swoopRacer, context.consularSecurityForce, context.steadfastBattalion]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.consularSecurityForce);
                 expect(context.consularSecurityForce.damage).toBe(4);
                 expect(context.player2).toBeActivePlayer();
@@ -86,7 +86,7 @@ describe('Zeb Orrelios, Headstrong Warrior', function () {
                 ]));
 
                 expect(context.player1).toBeAbleToSelectExactly([context.zebOrrelios, context.wampa]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
 
                 context.player1.clickCard(context.wampa);
                 expect(context.wampa.damage).toBe(4);

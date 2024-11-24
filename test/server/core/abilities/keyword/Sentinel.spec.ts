@@ -5,11 +5,12 @@ describe('Sentinel keyword', function() {
                 contextRef.setupTest({
                     phase: 'action',
                     player1: {
+                        hand: ['waylay'],
                         groundArena: ['liberated-slaves'],
                     },
                     player2: {
                         groundArena: ['echo-base-defender', 'battlefield-marine', 'wookiee-warrior'],
-                        spaceArena: ['system-patrol-craft', 'seventh-fleet-defender', 'imperial-interceptor']
+                        spaceArena: ['system-patrol-craft', 'seventh-fleet-defender', 'imperial-interceptor'],
                     }
                 });
             });
@@ -18,6 +19,22 @@ describe('Sentinel keyword', function() {
                 const { context } = contextRef;
 
                 context.player1.clickCard(context.liberatedSlaves);
+                expect(context.liberatedSlaves.exhausted).toBe(true);
+                expect(context.p2Base.damage).toBe(0);
+                expect(context.liberatedSlaves.damage).toBe(4);
+                expect(context.echoBaseDefender).toBeInZone('discard');
+            });
+
+            it('is removed from play and played again it should retain its 1 keyword', function() {
+                const { context } = contextRef;
+
+                context.player1.clickCard(context.waylay);
+                context.player1.clickCard(context.echoBaseDefender);
+
+                context.player2.clickCard(context.echoBaseDefender);
+                context.player1.clickCard(context.liberatedSlaves);
+
+                // check board state
                 expect(context.liberatedSlaves.exhausted).toBe(true);
                 expect(context.p2Base.damage).toBe(0);
                 expect(context.liberatedSlaves.damage).toBe(4);

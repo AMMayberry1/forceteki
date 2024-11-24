@@ -9,6 +9,7 @@ describe('Grit keyword', function() {
                     },
                     player2: {
                         groundArena: ['regional-governor'],
+                        hand: ['waylay']
                     }
                 });
             });
@@ -30,6 +31,22 @@ describe('Grit keyword', function() {
 
                 context.setDamage(context.scoutBikePursuer, 0);
                 expect(context.scoutBikePursuer.getPower()).toBe(1);
+            });
+
+            it('is removed from play it shouldn\'t have the keyword twice.', function() {
+                const { context } = contextRef;
+                context.player1.passAction();
+                context.player2.clickCard(context.waylay);
+                context.player2.clickCard(context.scoutBikePursuer);
+
+                context.player1.clickCard(context.scoutBikePursuer);
+                context.player2.clickCard(context.regionalGovernor);
+                context.player2.clickCard(context.scoutBikePursuer);
+
+                // check board state
+                expect(context.scoutBikePursuer.damage).toBe(1);
+                expect(context.scoutBikePursuer.getPower()).toBe(2);
+                expect(context.regionalGovernor.damage).toBe(1);
             });
         });
 

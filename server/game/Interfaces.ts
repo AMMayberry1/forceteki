@@ -200,6 +200,10 @@ export type WhenType<TSource extends Card = Card> = {
 
 export type IOngoingEffectGenerator = (game: Game, source: Card, props: IOngoingEffectProps) => (OngoingCardEffect | OngoingPlayerEffect);
 
+export type IThenAbilityPropsWithSystems<TContext extends AbilityContext> = IAbilityPropsWithSystems<TContext> & {
+    thenCondition?: (context?: TContext) => boolean;
+};
+
 // ********************************************** INTERNAL TYPES **********************************************
 interface IReplacementEffectAbilityBaseProps<TSource extends Card = Card> extends Omit<ITriggeredAbilityBaseProps<TSource>,
         'immediateEffect' | 'targetResolver' | 'targetResolvers' | 'handler'
@@ -248,10 +252,6 @@ type IAbilityPropsWithSystems<TContext extends AbilityContext> =
   IAbilityPropsWithTargetResolver<TContext> |
   IAbilityPropsWithTargetResolvers<TContext> |
   IAbilityPropsWithHandler<TContext>;
-
-type IThenAbilityPropsWithSystems<TContext extends AbilityContext> = IAbilityPropsWithSystems<TContext> & {
-    thenCondition?: (context?: TContext) => boolean;
-};
 
 interface IReplacementEffectAbilityWhenProps<TSource extends Card> extends IReplacementEffectAbilityBaseProps<TSource> {
     when: WhenType<TSource>;

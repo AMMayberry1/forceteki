@@ -53,7 +53,7 @@ describe('Play upgrade from hand', function() {
                 context.player1.clickCard(context.brightHope);
                 expect(context.brightHope.upgrades).toContain(context.resilient);
                 expect(context.wampa.upgrades.length).toBe(1);
-                expect(context.resilient).toBeInZone('spaceArena', context.player2);
+                expect(context.resilient).toBeInZone('spaceArena', context.player1);
                 expect(context.brightHope.getPower()).toBe(2);
                 expect(context.brightHope.getHp()).toBe(9);
 

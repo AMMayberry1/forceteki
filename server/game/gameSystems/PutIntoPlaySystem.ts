@@ -39,10 +39,11 @@ export class PutIntoPlaySystem<TContext extends AbilityContext = AbilityContext>
             event.card.exhaust();
         }
 
+        // TODO TAKE CONTROL: fix this, see if other similar systems have the same logic
         // moveCard sets all this stuff and only works if the owner is moving cards, so we're switching it around
         if (event.card.controller !== finalController) {
             event.card.controller = finalController;
-            event.card.setDefaultController(event.card.controller);
+            // event.card.setDefaultController(event.card.controller);
             event.card.owner.cardsInPlay.splice(event.card.owner.cardsInPlay.indexOf(event.card), 1);
             event.card.controller.cardsInPlay.push(event.card);
         }

@@ -75,6 +75,7 @@ export class EventWindow extends BaseStepWithPipeline {
             new SimpleStep(this.game, () => this.generateContingentEvents(), 'generateContingentEvents'),
             new SimpleStep(this.game, () => this.preResolutionEffects(), 'preResolutionEffects'),
             new SimpleStep(this.game, () => this.resolveEvents(), 'resolveEvents'),
+            new SimpleStep(this.game, () => this.checkUniqueRule(), 'checkUniqueRule'),
             new SimpleStep(this.game, () => this.resolveGameState(), 'resolveGameState'),
             new SimpleStep(this.game, () => this.resolveSubwindowEvents(), 'checkSubwindowEvents'),
             new SimpleStep(this.game, () => this.resolveSubAbilityStep(), 'checkThenAbilitySteps'),
@@ -198,6 +199,11 @@ export class EventWindow extends BaseStepWithPipeline {
                 this.resolvedEvents.push(event);
             }
         }
+    }
+
+    // check for duplicates of unique cards
+    private checkUniqueRule() {
+        this.game.checkUniqueRule();
     }
 
     // resolve game state and emit triggers again

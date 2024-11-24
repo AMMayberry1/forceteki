@@ -1,7 +1,7 @@
 import Player from '../Player';
 import { InPlayCard } from './baseClasses/InPlayCard';
 import * as Contract from '../utils/Contract';
-import { CardType } from '../Constants';
+import { CardType, MoveZoneDestination, ZoneName } from '../Constants';
 
 export class LeaderCard extends InPlayCard {
     protected _deployed = false;
@@ -34,5 +34,10 @@ export class LeaderCard extends InPlayCard {
      */
     protected setupLeaderSideAbilities() {
         this.hasImplementationFile = false;
+    }
+
+    // TODO TYPE REFACTOR: leaders shouldn't have the takeControl method
+    public override takeControl(newController: Player, _moveTo?: ZoneName.SpaceArena | ZoneName.GroundArena | ZoneName.Resource) {
+        Contract.fail(`Attempting to take control of leader ${this.internalName} for player ${newController.name}, which is illegal`);
     }
 }

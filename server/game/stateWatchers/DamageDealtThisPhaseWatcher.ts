@@ -9,6 +9,7 @@ export interface DamageDealtEntry {
     damageType: DamageType;
     damageSource: IDamageSource;
     target: Card;
+    amount: number;
 }
 
 export type IDamageDealtThisPhase = DamageDealtEntry[];
@@ -35,7 +36,8 @@ export class DamageDealtThisPhaseWatcher extends StateWatcher<IDamageDealtThisPh
                 currentState.concat({
                     damageType: event.type,
                     damageSource: event.damageSource,
-                    target: event.card
+                    target: event.card,
+                    amount: event.amount
                 })
         });
     }

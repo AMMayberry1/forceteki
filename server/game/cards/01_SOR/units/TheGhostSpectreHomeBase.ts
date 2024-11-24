@@ -17,8 +17,8 @@ export default class TheGhostSpectreHomeBase extends NonLeaderUnitCard {
                 onAttackDeclared: (event, context) => event.attack.attacker === context.source,
                 onCardPlayed: (event, context) => event.card === context.source
             },
+            optional: true,
             targetResolver: {
-                optional: true,
                 cardCondition: (card, context) => card !== context.source && card.hasSomeTrait(Trait.Spectre),
                 immediateEffect: AbilityHelper.immediateEffects.giveShield()
             }

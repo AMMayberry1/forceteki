@@ -177,19 +177,21 @@ export abstract class CardTargetSystem<TContext extends AbilityContext = Ability
             });
             const contingentEvents = [onCardLeavesPlayEvent];
 
-            // add events to defeat any upgrades attached to this card. the events will be added as "contingent events"
-            // in the event window, so they'll resolve in the same window but after the primary event
-            for (const upgrade of (event.card.upgrades ?? []) as UpgradeCard[]) {
-                if (upgrade.isInPlay()) {
-                    const attachmentEvent = context.game.actions
-                        .defeat({ target: upgrade })
-                        .generateEvent(context.game.getFrameworkContext());
-                    attachmentEvent.order = event.order - 1;
-                    const previousCondition = attachmentEvent.condition;
-                    attachmentEvent.condition = (attachmentEvent) =>
-                        previousCondition(attachmentEvent) && upgrade.parentCard === event.card;
-                    attachmentEvent.isContingent = true;
-                    contingentEvents.push(attachmentEvent);
+            if (event.card.zoneName !== ZoneName.Resource) {
+                // add events to defeat any upgrades attached to this card. the events will be added as "contingent events"
+                // in the event window, so they'll resolve in the same window but after the primary event
+                for (const upgrade of (event.card.upgrades ?? []) as UpgradeCard[]) {
+                    if (upgrade.isInPlay()) {
+                        const attachmentEvent = context.game.actions
+                            .defeat({ target: upgrade })
+                            .generateEvent(context.game.getFrameworkContext());
+                        attachmentEvent.order = event.order - 1;
+                        const previousCondition = attachmentEvent.condition;
+                        attachmentEvent.condition = (attachmentEvent) =>
+                            previousCondition(attachmentEvent) && upgrade.parentCard === event.card;
+                        attachmentEvent.isContingent = true;
+                        contingentEvents.push(attachmentEvent);
+                    }
                 }
             }
 

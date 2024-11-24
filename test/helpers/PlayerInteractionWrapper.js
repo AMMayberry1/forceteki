@@ -616,6 +616,10 @@ class PlayerInteractionWrapper {
         // this.checkUnserializableGameState();
     }
 
+    getCardsInZone(zone) {
+        return this.player.getCardsInZone(zone);
+    }
+
     dragCard(card, targetZone) {
         this.game.drop(this.player.name, card.uuid, card.zoneName, targetZone);
         this.game.continue();
@@ -630,6 +634,7 @@ class PlayerInteractionWrapper {
      * card object, if card parameter is a String
      */
     moveCard(card, targetZone, searchZones = 'any') {
+        // TODO: Check that space units can not be added to ground arena and vice versa
         if (typeof card === 'string') {
             card = this.mixedListToCardList([card], searchZones)[0];
         }

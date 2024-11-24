@@ -6,7 +6,7 @@ describe('Medal Ceremony', function() {
                     phase: 'action',
                     player1: {
                         hand: ['medal-ceremony'],
-                        groundArena: ['battlefield-marine', 'frontier-atrt', 'alliance-dispatcher'],
+                        groundArena: ['battlefield-marine', 'frontier-atrt', 'specforce-soldier'],
                         leader: { card: 'chirrut-imwe#one-with-the-force', deployed: true }
                     },
                     player2: {
@@ -43,7 +43,7 @@ describe('Medal Ceremony', function() {
                 context.player2.clickCard(context.allianceXwing);
 
                 // attack 7: our rebel (goes to discard)
-                context.player1.clickCard(context.allianceDispatcher);
+                context.player1.clickCard(context.specforceSoldier);
                 context.player1.clickCard(context.wampa);
 
                 context.player2.passAction();

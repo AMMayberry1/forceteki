@@ -1,5 +1,5 @@
 const { UiPrompt } = require('./prompts/UiPrompt.js');
-const { ZoneName, RelativePlayer, WildcardZoneName } = require('../Constants.js');
+const { RelativePlayer, WildcardZoneName } = require('../Constants.js');
 const EnumHelpers = require('../utils/EnumHelpers.js');
 const Contract = require('../utils/Contract');
 

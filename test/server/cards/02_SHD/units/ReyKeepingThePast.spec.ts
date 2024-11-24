@@ -74,22 +74,21 @@ describe('Rey, Keeping the Past', function() {
                 expect(context.mandalorianWarrior).toHaveExactUpgradeNames(['shield']);
             });
 
-            // TODO: Uncomment this test after Kylo Ren leader is implemented
-            // it('ignores Heroism aspect penalty when Kylo Ren is the leader', function () {
-            //     contextRef.setupTest({
-            //         phase: 'action',
-            //         player1: {
-            //             hand: ['rey#keeping-the-past'],
-            //             base: 'kestro-city',
-            //             leader: 'kylo-ren#rash-and-deadly'
-            //         }
-            //     });
+            it('ignores Heroism aspect penalty when Kylo Ren is the leader', function () {
+                contextRef.setupTest({
+                    phase: 'action',
+                    player1: {
+                        hand: ['rey#keeping-the-past'],
+                        base: 'dagobah-swamp',
+                        leader: 'kylo-ren#rash-and-deadly'
+                    }
+                });
 
-            //     const { context } = contextRef;
-            //     context.player1.clickCard(context.rey);
-            //     // Rey should cost 5 since it ignores the heroism aspect due to Kylo Ren being the leader
-            //     expect(context.player1.exhaustedResourceCount).toBe(5);
-            // });
+                const { context } = contextRef;
+                context.player1.clickCard(context.rey);
+                // Rey should cost 5 since it ignores the heroism aspect due to Kylo Ren being the leader
+                expect(context.player1.exhaustedResourceCount).toBe(5);
+            });
         });
     });
 });

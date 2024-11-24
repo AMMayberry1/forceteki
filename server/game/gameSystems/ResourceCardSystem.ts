@@ -10,7 +10,7 @@ import { GameEvent } from '../core/event/GameEvent';
 export interface IResourceCardProperties extends ICardTargetSystemProperties {
     // TODO: remove completely if faceup logic is not needed
     // faceup?: boolean;
-    targetPlayer?: RelativePlayer; // TODO: this might be needed for Arquitens Assault Cruiser
+    targetPlayer?: RelativePlayer;
     readyResource?: boolean;
 }
 
@@ -31,11 +31,14 @@ export class ResourceCardSystem<TContext extends AbilityContext = AbilityContext
         // event.cardStateWhenMoved = card.createSnapshot();
 
         const card = event.card as Card;
+        Contract.assertTrue(card.isTokenOrPlayable());
+        Contract.assertFalse(card.isToken());
 
-        // TODO TAKE CONTROL: change controller on being resourced logic
-        // const player = event.targetPlayer === RelativePlayer.Opponent ? card.controller.opponent : card.controller;
-
-        card.moveTo(ZoneName.Resource);
+        if (event.resourceControllingPlayer !== card.controller) {
+            card.takeControl(event.resourceControllingPlayer, ZoneName.Resource);
+        } else {
+            card.moveTo(ZoneName.Resource);
+        }
     }
 
     public override generatePropertiesFromContext(context: TContext, additionalProperties = {}): IResourceCardProperties {
@@ -79,18 +82,26 @@ export class ResourceCardSystem<TContext extends AbilityContext = AbilityContext
         const properties = this.generatePropertiesFromContext(context, additionalProperties);
         super.addPropertiesToEvent(event, card, context, additionalProperties);
 
-        event.targetPlayer = properties.targetPlayer;
+        event.resourceControllingPlayer = this.getResourceControllingPlayer(properties, context);
     }
 
     public override canAffect(card: Card, context: TContext, additionalProperties = {}): boolean {
         const { targetPlayer } = this.generatePropertiesFromContext(context, additionalProperties) as IResourceCardProperties;
-        return (
-            (targetPlayer === RelativePlayer.Self ||
-              (!card.hasRestriction(EffectName.TakeControl, context) &&
-                !card.anotherUniqueInPlay(context.player))) &&
-                context.player.isLegalZoneForCardType(card.type, ZoneName.Resource) &&
-                !EnumHelpers.isArena(card.zoneName) &&
-                super.canAffect(card, context)
-        );
+
+        const resourceControllingPlayer = this.getResourceControllingPlayer({ targetPlayer }, context);
+
+        if (resourceControllingPlayer !== card.controller && card.hasRestriction(EffectName.TakeControl, context)) {
+            return false;
+        }
+
+        if (!context.player.isLegalZoneForCardType(card.type, ZoneName.Resource)) {
+            return false;
+        }
+
+        return super.canAffect(card, context);
+    }
+
+    private getResourceControllingPlayer(properties: IResourceCardProperties, context: TContext) {
+        return properties.targetPlayer === RelativePlayer.Self ? context.player : context.player.opponent;
     }
 }

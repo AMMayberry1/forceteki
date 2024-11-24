@@ -12,8 +12,8 @@ export default class CountDookuDarthTyranus extends NonLeaderUnitCard {
     public override setupCardAbilities() {
         this.addWhenPlayedAbility({
             title: 'Defeat a unit with 4 or less remaining HP',
+            optional: true,
             targetResolver: {
-                optional: true,
                 cardCondition: (card) => card.isUnit() && card.remainingHp <= 4,
                 immediateEffect: AbilityHelper.immediateEffects.defeat()
             }

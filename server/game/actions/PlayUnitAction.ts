@@ -1,13 +1,21 @@
 import { AbilityRestriction, EffectName, EventName, PlayType, RelativePlayer } from '../core/Constants.js';
 import { putIntoPlay } from '../gameSystems/GameSystemLibrary.js';
-import { Card } from '../core/card/Card';
 import { GameEvent } from '../core/event/GameEvent.js';
-import { PlayCardAction, PlayCardContext } from '../core/ability/PlayCardAction.js';
+import { PlayCardAction, PlayCardContext, IPlayCardActionProperties } from '../core/ability/PlayCardAction.js';
 import * as Contract from '../core/utils/Contract.js';
 
+export interface IPlayUnitActionProperties extends IPlayCardActionProperties {
+    entersReady?: boolean;
+}
+
 export class PlayUnitAction extends PlayCardAction {
-    public constructor(card: Card, playType: PlayType = PlayType.PlayFromHand, private entersReady: boolean = false) {
-        super(card, 'Play this unit', playType);
+    private entersReady: boolean;
+
+    public constructor(properties: IPlayUnitActionProperties) {
+        super({ ...properties, title: 'Play this unit' });
+
+        // default to false
+        this.entersReady = !!properties.entersReady;
     }
 
     public override executeHandler(context: PlayCardContext): void {

@@ -22,7 +22,7 @@ describe('The Ghost, Spectre Home Base', function () {
                 // also shield
                 context.player1.clickPrompt('Give a shield token to another Spectre unit');
                 expect(context.player1).toBeAbleToSelectExactly([context.sabineWren, context.kananJarrus]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.sabineWren);
 
                 // sabine should have a shield
@@ -53,7 +53,7 @@ describe('The Ghost, Spectre Home Base', function () {
                 context.player1.clickCard(context.p2Base);
 
                 expect(context.player1).toBeAbleToSelectExactly([context.sabineWren, context.kananJarrus]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.sabineWren);
 
                 // sabine should have a shield

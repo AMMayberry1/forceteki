@@ -23,7 +23,7 @@ describe('Principled Outlaw', function() {
                 context.player1.clickCard(context.p2Base);
 
                 expect(context.player1).toBeAbleToSelectExactly([context.principledOutlaw, context.wampa, context.grandMoffTarkin, context.battlefieldMarine]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.wampa);
                 expect(context.wampa.exhausted).toBeTrue();
             });

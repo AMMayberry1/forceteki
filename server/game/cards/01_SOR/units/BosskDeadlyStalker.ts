@@ -16,9 +16,9 @@ export default class BosskDeadlyStalker extends NonLeaderUnitCard {
             when: {
                 onCardPlayed: (event, context) => event.card.isEvent() && event.card.controller === context.source.controller
             },
+            optional: true,
             targetResolver: {
                 cardTypeFilter: WildcardCardType.Unit,
-                optional: true,
                 immediateEffect: AbilityHelper.immediateEffects.damage({ amount: 2 }),
             }
         });

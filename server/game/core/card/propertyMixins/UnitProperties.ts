@@ -1,5 +1,5 @@
 import { InitiateAttackAction } from '../../../actions/InitiateAttackAction';
-import { AbilityType, Arena, CardType, EffectName, EventName, KeywordName, ZoneName, RelativePlayer, StatType } from '../../Constants';
+import { Arena, CardType, EffectName, EventName, KeywordName, StatType, ZoneName } from '../../Constants';
 import StatsModifierWrapper from '../../ongoingEffect/effectImpl/StatsModifierWrapper';
 import { IOngoingCardEffect } from '../../ongoingEffect/IOngoingCardEffect';
 import * as Contract from '../../utils/Contract';
@@ -9,7 +9,7 @@ import { WithPrintedPower } from './PrintedPower';
 import * as EnumHelpers from '../../utils/EnumHelpers';
 import { UpgradeCard } from '../UpgradeCard';
 import { Card } from '../Card';
-import { ITriggeredAbilityProps, ITriggeredAbilityPropsWithType } from '../../../Interfaces';
+import { ITriggeredAbilityProps } from '../../../Interfaces';
 import { KeywordWithAbilityDefinition, KeywordWithNumericValue } from '../../ability/KeywordInstance';
 import TriggeredAbility from '../../ability/TriggeredAbility';
 import { IConstantAbility } from '../../ongoingEffect/IConstantAbility';
@@ -21,7 +21,6 @@ import { AmbushAbility } from '../../../abilities/keyword/AmbushAbility';
 import type Game from '../../Game';
 import { GameEvent } from '../../event/GameEvent';
 import { DefeatSourceType, IDamageSource } from '../../../IDamageOrDefeatSource';
-import { DefeatCardSystem } from '../../../gameSystems/DefeatCardSystem';
 import { FrameworkDefeatCardSystem } from '../../../gameSystems/FrameworkDefeatCardSystem';
 import * as KeywordHelpers from '../../ability/KeywordHelpers';
 
@@ -60,7 +59,7 @@ export function WithUnitProperties<TBaseClass extends InPlayCardConstructor>(Bas
             // register listeners for on-defeat keyword abilities
             game.on(EventName.OnCardDefeated, (event) => {
                 const card = event.card as Card;
-                if (card.isUnit()) {
+                if (card.zoneName !== ZoneName.Resource && card.isUnit()) {
                     card.checkRegisterWhenDefeatedKeywordAbilities(event);
                 }
             });

@@ -1,14 +1,11 @@
 import { AbilityRestriction, EventName, ZoneName, PlayType } from '../core/Constants.js';
-import { Card } from '../core/card/Card';
 import * as Contract from '../core/utils/Contract.js';
-import { PlayCardContext, PlayCardAction } from '../core/ability/PlayCardAction.js';
-import { AbilityContext } from '../core/ability/AbilityContext.js';
-import { MoveCardSystem } from '../gameSystems/MoveCardSystem.js';
+import { PlayCardContext, PlayCardAction, IPlayCardActionProperties } from '../core/ability/PlayCardAction.js';
 import { GameEvent } from '../core/event/GameEvent.js';
 
 export class PlayEventAction extends PlayCardAction {
-    public constructor(card: Card, playType: PlayType = PlayType.PlayFromHand) {
-        super(card, 'Play this event', playType);
+    public constructor(properties: IPlayCardActionProperties) {
+        super({ ...properties, title: 'Play this event' });
     }
 
     public override executeHandler(context: PlayCardContext): void {

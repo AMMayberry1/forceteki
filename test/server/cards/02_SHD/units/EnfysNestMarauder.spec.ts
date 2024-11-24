@@ -59,7 +59,8 @@ describe('Enfys Nest, Marauder', function () {
                 // Case 4: Ability applies to a unit played through an ambush-granting effect
                 reset();
                 context.player1.clickCard(context.energyConversionLab);
-                // Liberated Slaves is last card in hand, so automatically selected
+                expect(context.player1).toHavePassSingleTargetPrompt('Play a unit that costs 6 or less from your hand. Give it ambush for this phase', context.liberatedSlaves);
+                context.player1.clickPrompt('Play a unit that costs 6 or less from your hand. Give it ambush for this phase -> Liberated Slaves');
                 context.player1.clickPrompt('Ambush');
                 context.player1.clickCard(context.atst);
 

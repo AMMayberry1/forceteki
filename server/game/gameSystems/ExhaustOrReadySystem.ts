@@ -1,9 +1,8 @@
 import { AbilityContext } from '../core/ability/AbilityContext';
 import type { Card } from '../core/card/Card';
-import { CardType, CardTypeFilter, EventName, GameStateChangeRequired, ZoneName, WildcardCardType } from '../core/Constants';
+import { CardType, GameStateChangeRequired, WildcardCardType, ZoneName } from '../core/Constants';
 import * as EnumHelpers from '../core/utils/EnumHelpers';
-import { type ICardTargetSystemProperties, CardTargetSystem } from '../core/gameSystem/CardTargetSystem';
-import { CardWithExhaustProperty } from '../core/card/CardTypes';
+import { CardTargetSystem, type ICardTargetSystemProperties } from '../core/gameSystem/CardTargetSystem';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IExhaustOrReadyProperties extends ICardTargetSystemProperties {}

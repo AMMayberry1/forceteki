@@ -20,7 +20,7 @@ describe('Bounty Guild Initiate', function() {
                 context.player1.clickCard(context.bountyGuildInitiate);
                 // should select ground unit of both players
                 expect(context.player1).toBeAbleToSelectExactly([context.wampa, context.greedo, context.bountyGuildInitiate]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.wampa);
                 expect(context.wampa.damage).toBe(2);
                 expect(context.player2).toBeActivePlayer();

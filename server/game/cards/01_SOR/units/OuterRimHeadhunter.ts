@@ -13,8 +13,8 @@ export default class OuterRimHeadhunter extends NonLeaderUnitCard {
     public override setupCardAbilities() {
         this.addOnAttackAbility({
             title: 'Exhaust a non-leader unit if you control a leader unit',
+            optional: true,
             targetResolver: {
-                optional: true,
                 cardTypeFilter: WildcardCardType.NonLeaderUnit,
                 immediateEffect: AbilityHelper.immediateEffects.conditional({
                     condition: (context) => context.source.controller.leader.deployed,

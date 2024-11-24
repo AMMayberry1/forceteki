@@ -21,7 +21,7 @@ describe('Outer Rim Headhunter', function () {
 
                 // can target all non leader unit
                 expect(context.player1).toBeAbleToSelectExactly([context.battlefieldMarine, context.outerRimHeadhunter, context.scoutBikePursuer]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
 
                 // choose battlefield marine
                 context.player1.clickCard(context.battlefieldMarine);

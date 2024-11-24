@@ -17,9 +17,10 @@ export type InPlayCardConstructor = new (...args: any[]) => InPlayCard;
  * Subclass of {@link Card} (via {@link PlayableOrDeployableCard}) that adds properties for cards that
  * can be in any "in-play" zones (`SWU 4.9`). This encompasses all card types other than events or bases.
  *
- * The two unique properties of in-play cards added by this subclass are:
+ * The unique properties of in-play cards added by this subclass are:
  * 1. "Ongoing" abilities, i.e., triggered abilities and constant abilities
- * 2. The ability to be defeated as an overridable method
+ * 2. Defeat state management
+ * 3. Uniqueness management
  */
 export class InPlayCard extends PlayableOrDeployableCard {
     protected _pendingDefeat? = null;
@@ -172,18 +173,6 @@ export class InPlayCard extends PlayableOrDeployableCard {
         abilityToRemove.unregisterEvents();
     }
 
-    /** Update the context of each constant ability. Used when the card's controller has changed. */
-    // TODO TAKE CONTROL: this still needed?
-    public updateConstantAbilityContexts() {
-        for (const constantAbility of this.constantAbilities) {
-            if (constantAbility.registeredEffects) {
-                for (const effect of constantAbility.registeredEffects) {
-                    effect.refreshContext();
-                }
-            }
-        }
-    }
-
     public override resolveAbilitiesForNewZone() {
         // TODO: do we need to consider a case where a card is moved from one arena to another,
         // where we maybe wouldn't reset events / effects / limits?
@@ -200,10 +189,6 @@ export class InPlayCard extends PlayableOrDeployableCard {
 
         if (EnumHelpers.isArena(this.zoneName)) {
             this.setPendingDefeatEnabled(true);
-
-            if (this.unique) {
-                this.checkUnique();
-            }
         } else {
             this.setPendingDefeatEnabled(false);
         }
@@ -211,7 +196,9 @@ export class InPlayCard extends PlayableOrDeployableCard {
 
     /** Register / un-register the event triggers for any triggered abilities */
     private updateTriggeredAbilityEvents(from: ZoneName, to: ZoneName, reset: boolean = true) {
-        this.resetLimits();
+        if (!EnumHelpers.isArena(from) && !EnumHelpers.isArena(to)) {
+            this.resetLimits();
+        }
 
         for (const triggeredAbility of this.triggeredAbilities) {
             if (EnumHelpers.cardZoneMatches(to, triggeredAbility.zoneFilter) && !EnumHelpers.cardZoneMatches(from, triggeredAbility.zoneFilter)) {
@@ -266,7 +253,7 @@ export class InPlayCard extends PlayableOrDeployableCard {
         this._pendingDefeat = true;
     }
 
-    private checkUnique() {
+    public checkUnique() {
         Contract.assertTrue(this.unique);
 
         // need to filter for other cards that have unique = true since Clone will create non-unique duplicates

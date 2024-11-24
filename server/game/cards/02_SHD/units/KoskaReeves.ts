@@ -13,8 +13,8 @@ export default class KoskaReeves extends NonLeaderUnitCard {
     public override setupCardAbilities () {
         this.addOnAttackAbility({
             title: 'Deal 2 damage to a ground unit if Koska Reeves is upgraded',
+            optional: true,
             targetResolver: {
-                optional: true,
                 zoneFilter: ZoneName.GroundArena,
                 immediateEffect: AbilityHelper.immediateEffects.conditional({
                     condition: (context) => context.source.isUpgraded(),

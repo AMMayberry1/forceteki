@@ -1,8 +1,6 @@
 import AbilityHelper from '../../../AbilityHelper';
-import { InPlayCard } from '../../../core/card/baseClasses/InPlayCard';
 import { NonLeaderUnitCard } from '../../../core/card/NonLeaderUnitCard';
-import * as EnumHelpers from '../../../core/utils/EnumHelpers.js';
-import { CardType, ZoneName, RelativePlayer, TargetMode, WildcardCardType, WildcardZoneName } from '../../../core/Constants';
+import { TargetMode, WildcardCardType } from '../../../core/Constants';
 
 export default class LeiaOrganaDefiantPrincess extends NonLeaderUnitCard {
     protected override getImplementationId() {

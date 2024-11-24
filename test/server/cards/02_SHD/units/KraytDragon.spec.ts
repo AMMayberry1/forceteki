@@ -26,7 +26,7 @@ describe('Krayt Dragon', function () {
                 // enemy play a space unit, should deal damage to ground unit or base
                 context.player2.clickCard(context.greenSquadronAwing);
                 expect(context.player1).toBeAbleToSelectExactly([context.p2Base, context.wampa]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.wampa);
                 expect(context.wampa.damage).toBe(2);
 
@@ -58,6 +58,8 @@ describe('Krayt Dragon', function () {
                 // enemy kill everyone, krayt ability still activates
                 context.player1.passAction();
                 context.player2.clickCard(context.superlaserBlast);
+                expect(context.player1).toHavePassAbilityPrompt('Deal damage equal to that card’s cost to their base or a ground unit they control');
+                context.player1.clickPrompt('Deal damage equal to that card’s cost to their base or a ground unit they control');
                 expect(context.p2Base.damage).toBe(8);
             });
             // TODO test u-wing, vader or endless legion when implemented

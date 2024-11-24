@@ -56,9 +56,9 @@ describe('Guerilla Attack Pod', function () {
                 context.player2.passAction();
 
                 context.player1.clickCard(context.energyConversionLab);
-                expect(context.player1).toHavePrompt('Choose an ability to resolve:');
-                expect(context.player1).toHaveExactPromptButtons(['Ambush', 'If a base has 15 or more damage on it, ready this unit']);
+                expect(context.player1).toHavePassSingleTargetPrompt('Play a unit that costs 6 or less from your hand. Give it ambush for this phase', context.guerillaAttackPod);
 
+                context.player1.clickPrompt('Play a unit that costs 6 or less from your hand. Give it ambush for this phase -> Guerilla Attack Pod');
                 context.player1.clickPrompt('Ambush');
                 expect(context.player1).toHavePassAbilityPrompt('Ambush');
                 context.player1.clickPrompt('Ambush');

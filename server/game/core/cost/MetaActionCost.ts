@@ -22,11 +22,7 @@ export class MetaActionCost<TContext extends AbilityContext = AbilityContext> ex
 
     public override canPay(context: TContext): boolean {
         const properties = this.gameSystem.generatePropertiesFromContext(context) as ISelectCardProperties;
-        const additionalProps = {
-            controller: RelativePlayer.Self,
-            zoneFilter: properties.zoneFilter || WildcardZoneName.Any
-        };
-        return this.gameSystem.hasLegalTarget(context, additionalProps);
+        return this.gameSystem.hasLegalTarget(context);
     }
 
     public override queueGenerateEventGameSteps(events: GameEvent[], context: TContext, result: Result): void {

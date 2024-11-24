@@ -9,6 +9,7 @@ describe('Raid keyword', function() {
                     },
                     player2: {
                         groundArena: ['battlefield-marine'],
+                        hand: ['waylay']
                     }
                 });
             });
@@ -40,6 +41,23 @@ describe('Raid keyword', function() {
 
                 expect(context.battlefieldMarine.damage).toBe(0);
                 expect(context.cantinaBraggart).toBeInZone('discard');
+            });
+
+            it('is removed from play and played again it shouldn\'t have an additional raid.', function () {
+                const { context } = contextRef;
+                context.player1.passAction();
+                context.player2.clickCard(context.waylay);
+                context.player2.clickCard(context.cantinaBraggart);
+
+                context.player1.clickCard(context.cantinaBraggart);
+                context.cantinaBraggart.exhausted = false;
+                context.player2.passAction();
+
+                context.player1.clickCard(context.cantinaBraggart);
+                context.player1.clickCard(context.p2Base);
+                expect(context.cantinaBraggart.exhausted).toBe(true);
+                expect(context.cantinaBraggart.getPower()).toBe(0);
+                expect(context.p2Base.damage).toBe(2);
             });
         });
 

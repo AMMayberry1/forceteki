@@ -53,6 +53,7 @@ export type AnyCard =
   LeaderUnitCard |
   TokenUnitCard;
 
+// TODO TYPE REFACTOR: tokens should be separable from playable cards in the type hierarchy
 /** Type union for any card type that can be played or created (not deployed) */
 export type TokenOrPlayableCard =
   EventCard |

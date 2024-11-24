@@ -1,15 +1,15 @@
 import type { AbilityContext } from '../ability/AbilityContext';
 import type { IAbilityLimit } from '../ability/AbilityLimit';
 import type { Card } from '../card/Card';
-import { PlayType, Aspect, CardTypeFilter } from '../Constants';
+import { PlayType, Aspect, CardTypeFilter, CardType, WildcardCardType } from '../Constants';
 import type Game from '../Game';
 import type Player from '../Player';
-import * as EnumHelpers from '../utils/EnumHelpers';
 import * as Contract from '../../core/utils/Contract';
 
 export enum CostAdjustType {
     Increase = 'increase',
     Decrease = 'decrease',
+    Free = 'free',
     IgnoreAllAspects = 'ignoreAllAspects',
     IgnoreSpecificAspects = 'ignoreSpecificAspect'
 }
@@ -18,12 +18,12 @@ export enum CostAdjustType {
 interface ICostAdjusterPropertiesBase {
 
     /** The type of cards that can be reduced */
-    cardTypeFilter: CardTypeFilter;
+    cardTypeFilter?: CardTypeFilter;
 
     /** The type of cost adjustment */
     costAdjustType: CostAdjustType;
 
-    /** @deprecated (not yet tested) The number of cost reductions permitted */
+    /** The number of cost reductions permitted */
     limit?: IAbilityLimit;
 
     /** @deprecated (not yet tested) Which playType this reduction is active for */
@@ -43,6 +43,10 @@ export interface IIncreaseOrDecreaseCostAdjusterProperties extends ICostAdjuster
     amount?: number | ((card: Card, player: Player) => number);
 }
 
+export interface IForFreeCostAdjusterProperties extends ICostAdjusterPropertiesBase {
+    costAdjustType: CostAdjustType.Free;
+}
+
 export interface IIgnoreAllAspectsCostAdjusterProperties extends ICostAdjusterPropertiesBase {
     costAdjustType: CostAdjustType.IgnoreAllAspects;
 }
@@ -57,6 +61,7 @@ export interface IIgnoreSpecificAspectsCostAdjusterProperties extends ICostAdjus
 export type ICostAdjusterProperties =
   | IIgnoreAllAspectsCostAdjusterProperties
   | IIncreaseOrDecreaseCostAdjusterProperties
+  | IForFreeCostAdjusterProperties
   | IIgnoreSpecificAspectsCostAdjusterProperties;
 
 export class CostAdjuster {
@@ -87,7 +92,7 @@ export class CostAdjuster {
         }
 
         this.match = properties.match;
-        this.cardTypeFilter = properties.cardTypeFilter;
+        this.cardTypeFilter = properties.cardTypeFilter ?? WildcardCardType.Any;
         this.attachTargetCondition = properties.attachTargetCondition;
 
         this.playingTypes =

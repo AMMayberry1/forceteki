@@ -17,10 +17,10 @@ export default class KraytDragon extends NonLeaderUnitCard {
             when: {
                 onCardPlayed: (event, context) => event.card.controller === context.source.controller.opponent,
             },
+            optional: true,
             targetResolver: {
                 controller: RelativePlayer.Opponent,
                 zoneFilter: [ZoneName.GroundArena, ZoneName.Base],
-                optional: true,
                 immediateEffect: AbilityHelper.immediateEffects.damage((context) => ({
                     amount: context.event.card.cost,
                 }))

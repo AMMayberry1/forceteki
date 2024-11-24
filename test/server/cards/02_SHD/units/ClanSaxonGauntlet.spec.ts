@@ -30,7 +30,7 @@ describe('Clan Saxon Gauntlet', function () {
                 // unit attacks clan saxon gauntlet, should give an experience
                 context.player2.clickCard(context.hwk290Freighter);
                 expect(context.player1).toBeAbleToSelectExactly([context.clanSaxonGauntlet, context.swoopRacer, context.battlefieldMarine, context.greenSquadronAwing, context.hwk290Freighter]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
 
                 // give the experience to himself, should kill hwk290
                 context.player1.clickCard(context.clanSaxonGauntlet);
@@ -42,7 +42,7 @@ describe('Clan Saxon Gauntlet', function () {
                 // unit attacks clan saxon gauntlet, should give an experience
                 context.player2.clickCard(context.greenSquadronAwing);
                 expect(context.player1).toBeAbleToSelectExactly([context.clanSaxonGauntlet, context.swoopRacer, context.battlefieldMarine, context.greenSquadronAwing]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
 
                 // give the experience to a friendly unit
                 context.player1.clickCard(context.swoopRacer);

@@ -8,6 +8,7 @@ describe('Restore keyword', function() {
                         groundArena: ['regional-sympathizers'],
                     },
                     player2: {
+                        hand: ['waylay']
                     }
                 });
             });
@@ -20,6 +21,23 @@ describe('Restore keyword', function() {
                 // attack resolves automatically since there's only one target (p2Base)
                 context.player1.clickCard(context.regionalSympathizers);
 
+                expect(context.p1Base.damage).toBe(3);
+                expect(context.p2Base.damage).toBe(3);
+                expect(context.regionalSympathizers.exhausted).toBe(true);
+            });
+
+            it('is removed from play and played again it should not gain an additional restore keyword', function() {
+                const { context } = contextRef;
+                context.setDamage(context.p1Base, 5);
+
+                context.player1.passAction();
+                context.player2.clickCard(context.waylay);
+
+                context.player1.clickCard(context.regionalSympathizers);
+                context.regionalSympathizers.exhausted = false;
+                context.player2.passAction();
+
+                context.player1.clickCard(context.regionalSympathizers);
                 expect(context.p1Base.damage).toBe(3);
                 expect(context.p2Base.damage).toBe(3);
                 expect(context.regionalSympathizers.exhausted).toBe(true);

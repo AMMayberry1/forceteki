@@ -1,9 +1,8 @@
 import type { AbilityContext } from '../core/ability/AbilityContext';
 import type { Card } from '../core/card/Card';
-import { EventName, ZoneName, WildcardCardType } from '../core/Constants';
-import { type ICardTargetSystemProperties, CardTargetSystem } from '../core/gameSystem/CardTargetSystem';
+import { EventName, WildcardCardType, ZoneName } from '../core/Constants';
+import { CardTargetSystem, type ICardTargetSystemProperties } from '../core/gameSystem/CardTargetSystem';
 import * as Contract from '../core/utils/Contract';
-import * as EnumHelpers from '../core/utils/EnumHelpers';
 import { DamageSourceType, DefeatSourceType, IDamageSource, IDefeatSource } from '../IDamageOrDefeatSource';
 
 export interface IDefeatCardPropertiesBase extends ICardTargetSystemProperties {
@@ -14,7 +13,7 @@ export interface IDefeatCardProperties extends IDefeatCardPropertiesBase {
 
     /**
      * Identifies the type of effect that triggered the defeat. If the defeat was caused by damage,
-     * just pass in the damage source metadata. Otherwise the defeat is due to an ability (default).
+     * just pass in the damage source metadata. Otherwise, the defeat is due to an ability (default).
      */
     defeatSource?: IDamageSource | DefeatSourceType.Ability;
 }
@@ -30,7 +29,7 @@ export class DefeatCardSystem<TContext extends AbilityContext = AbilityContext, 
     };
 
     public eventHandler(event): void {
-        if (event.card.isUpgrade()) {
+        if (event.card.zoneName !== ZoneName.Resource && event.card.isUpgrade()) {
             event.card.unattach();
         }
 
@@ -50,10 +49,7 @@ export class DefeatCardSystem<TContext extends AbilityContext = AbilityContext, 
     }
 
     public override canAffect(card: Card, context: TContext): boolean {
-        if (
-            card.zoneName !== ZoneName.Resource &&
-            (!card.canBeInPlay() || !card.isInPlay())
-        ) {
+        if (card.zoneName !== ZoneName.Resource && (!card.canBeInPlay() || !card.isInPlay())) {
             return false;
         }
         return super.canAffect(card, context);
@@ -82,7 +78,7 @@ export class DefeatCardSystem<TContext extends AbilityContext = AbilityContext, 
             eventDefeatSource = this.buildDefeatSourceForType(defeatSource, event, context);
         }
 
-        event.defeatSource = defeatSource;
+        event.defeatSource = eventDefeatSource;
     }
 
     protected buildDefeatSourceForType(defeatSourceType: DefeatSourceType, event: any, context: TContext): IDefeatSource | null {
@@ -98,6 +94,11 @@ export class DefeatCardSystem<TContext extends AbilityContext = AbilityContext, 
     }
 
     protected override updateEvent(event, card: Card, context: TContext, additionalProperties): void {
-        this.addLeavesPlayPropertiesToEvent(event, card, context, additionalProperties);
+        // TODO maybe refactor addLeavesPlayPropertiesToEvent without calling super.updateEvent()
+        if (card.zoneName !== ZoneName.Resource) {
+            this.addLeavesPlayPropertiesToEvent(event, card, context, additionalProperties);
+        } else {
+            super.updateEvent(event, card, context, additionalProperties);
+        }
     }
 }

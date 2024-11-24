@@ -1,6 +1,6 @@
 import AbilityHelper from '../../../AbilityHelper';
 import { UpgradeCard } from '../../../core/card/UpgradeCard';
-import { KeywordName, RelativePlayer, WildcardRelativePlayer } from '../../../core/Constants';
+import { KeywordName, WildcardRelativePlayer } from '../../../core/Constants';
 import { TargetMode } from '../../../core/Constants';
 
 export default class RichReward extends UpgradeCard {

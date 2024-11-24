@@ -35,7 +35,7 @@ describe('Koska Reeves', function() {
 
                 // koska should be able to select ground unit to deal extra damage
                 expect(context.player1).toBeAbleToSelectExactly([context.koskaReeves, context.wampa]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.wampa);
                 expect(context.wampa.damage).toBe(2);
                 expect(context.player2).toBeActivePlayer();

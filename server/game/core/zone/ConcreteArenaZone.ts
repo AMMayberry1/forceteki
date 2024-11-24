@@ -72,4 +72,23 @@ export abstract class ConcreteArenaZone extends ConcreteOrMetaArenaZone implemen
 
         cardListForController.splice(cardIdx, 1);
     }
+
+    public updateController(card: Card) {
+        Contract.assertTrue(card.canBeInPlay());
+
+        const controllerCardsList = this._cards.get(card.controller);
+
+        // card is already in its controller's list, nothing to do
+        if (controllerCardsList.includes(card)) {
+            return;
+        }
+
+        const opponentCardsList = this._cards.get(card.controller.opponent);
+        const removeCardIdx = opponentCardsList.indexOf(card);
+
+        Contract.assertTrue(removeCardIdx !== -1, `Attempting to update controller of card ${card.internalName} to ${card.controller} in ${this} but it is not in the arena`);
+
+        opponentCardsList.splice(removeCardIdx, 1);
+        controllerCardsList.push(card);
+    }
 }

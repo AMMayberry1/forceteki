@@ -11,7 +11,8 @@ describe('Saboteur keyword', function() {
                         groundArena: ['echo-base-defender',
                             { card: 'wampa', upgrades: ['shield', 'shield', 'resilient'] }
                         ],
-                        spaceArena: ['system-patrol-craft']
+                        spaceArena: ['system-patrol-craft'],
+                        hand: ['waylay']
                     }
                 });
             });
@@ -26,6 +27,25 @@ describe('Saboteur keyword', function() {
                 expect(context.resourcefulPursuers.damage).toBe(0);
                 expect(context.echoBaseDefender).toBeInZone('groundArena');
                 expect(context.wampa.zoneName).toBe('groundArena');
+            });
+
+            it('after it was removed from play and played again it shouldn\'t cause an error', function() {
+                const { context } = contextRef;
+
+                context.player1.passAction();
+                context.player2.clickCard(context.waylay);
+                context.player2.clickCard(context.resourcefulPursuers);
+                context.player1.clickCard(context.resourcefulPursuers);
+
+
+                context.resourcefulPursuers.exhausted = false;
+                context.player2.passAction();
+
+                // see if everything goes normally
+                context.player1.clickCard(context.resourcefulPursuers);
+                context.player1.clickCard(context.p2Base);
+                expect(context.p2Base.damage).toBe(5);
+                expect(context.resourcefulPursuers.damage).toBe(0);
             });
 
             it('a unit with shields, the shields are defeated before the attack', function () {

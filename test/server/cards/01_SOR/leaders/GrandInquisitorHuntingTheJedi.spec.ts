@@ -74,7 +74,7 @@ describe('Grand Inquisitor, Hunting the Jedi', function() {
                 context.player1.clickCard(context.p2Base);
 
                 expect(context.player1).toBeAbleToSelectExactly([context.scoutBikePursuer, context.deathStarStormtrooper]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.scoutBikePursuer);
 
                 expect(context.scoutBikePursuer.damage).toBe(1);
@@ -92,7 +92,7 @@ describe('Grand Inquisitor, Hunting the Jedi', function() {
 
                 // try to ready death star stormtrooper but damage will kill it
                 expect(context.player1).toBeAbleToSelectExactly([context.scoutBikePursuer, context.deathStarStormtrooper]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.deathStarStormtrooper);
 
                 // check stormtrooper is dead and no one is ready

@@ -18,6 +18,7 @@ export abstract class AggregateSystem<TContext extends AbilityContext = AbilityC
     public override generatePropertiesFromContext(context: TContext, additionalProperties = {}) {
         const properties = super.generatePropertiesFromContext(context, additionalProperties);
 
+        // TODO: this seems to cause issues with player target system defaults when the list includes both a card target and player target system
         // if we have an assigned target, overwrite the default target on all inner systems
         if (properties.target !== null && (!Array.isArray(properties.target) || properties.target.length !== 0)) {
             for (const gameSystem of this.getInnerSystems(properties)) {

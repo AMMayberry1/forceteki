@@ -19,7 +19,7 @@ describe('Outland TIE Vanguard', function() {
                 context.player1.clickCard(context.outlandTieVanguard);
                 // should select ground unit of both players
                 expect(context.player1).toBeAbleToSelectExactly([context.greedo, context.greenSquadronAwing]);
-                expect(context.player1).toHaveChooseNoTargetButton();
+                expect(context.player1).toHavePassAbilityButton();
                 context.player1.clickCard(context.greedo);
                 expect(context.greedo).toHaveExactUpgradeNames(['experience']);
                 expect(context.player2).toBeActivePlayer();

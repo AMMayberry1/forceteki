@@ -320,7 +320,11 @@ class PlayerOrCardAbility {
         return this.type === AbilityType.Triggered;
     }
 
-    /** Indicates whether a card is played as part of the resolution this ability */
+    // TODO: refactor the other methods to also be type predicates
+    /**
+     * Indicates whether a card is played as part of the resolution this ability
+     * @returns {this is import('./PlayCardAction.js').PlayCardAction}
+     */
     isCardPlayed() {
         return false;
     }

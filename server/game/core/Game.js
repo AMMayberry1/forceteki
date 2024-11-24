@@ -28,7 +28,7 @@ const { cards } = require('../cards/Index.js');
 // const ConflictFlow = require('./gamesteps/conflict/conflictflow');
 // const MenuCommands = require('./MenuCommands');
 
-const { EventName, ZoneName, TokenName, Trait } = require('./Constants.js');
+const { EventName, ZoneName, TokenName, Trait, WildcardZoneName } = require('./Constants.js');
 const { BaseStepWithPipeline } = require('./gameSteps/BaseStepWithPipeline.js');
 const { default: Shield } = require('../cards/01_SOR/tokens/Shield.js');
 const { StateWatcherRegistrar } = require('./stateWatcher/StateWatcherRegistrar.js');
@@ -40,6 +40,7 @@ const { Card } = require('./card/Card.js');
 const { GroundArenaZone } = require('./zone/GroundArenaZone.js');
 const { SpaceArenaZone } = require('./zone/SpaceArenaZone.js');
 const { AllArenasZone } = require('./zone/AllArenasZone.js');
+const EnumHelpers = require('./utils/EnumHelpers.js');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -309,6 +310,23 @@ class Game extends EventEmitter {
     //     this.allCards.push(token);
     //     return token;
     // }
+
+    /**
+     * Return the `Zone` object corresponding to the arena type
+     * @param {ZoneName.SpaceArena | ZoneName.GroundArena | WildcardZoneName.AnyArena} arenaName
+     */
+    getArena(arenaName) {
+        switch (arenaName) {
+            case ZoneName.GroundArena:
+                return this.groundArena;
+            case ZoneName.SpaceArena:
+                return this.spaceArena;
+            case WildcardZoneName.AnyArena:
+                return this.allArenas;
+            default:
+                Contract.fail(`Unknown arena enum value: ${arenaName}`);
+        }
+    }
 
     get actions() {
         return GameSystems;
@@ -1124,6 +1142,15 @@ class Game extends EventEmitter {
         player.disconnected = false;
 
         this.addMessage('{0} has reconnected', player);
+    }
+
+    /** Goes through the list of cards moved during event resolution and does a uniqueness rule check for each */
+    checkUniqueRule() {
+        for (const movedCard of this.movedCards) {
+            if (EnumHelpers.isArena(movedCard.zoneName) && movedCard.unique) {
+                movedCard.checkUnique();
+            }
+        }
     }
 
     resolveGameState(hasChanged = false, events = []) {

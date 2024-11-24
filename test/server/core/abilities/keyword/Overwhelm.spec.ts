@@ -12,7 +12,8 @@ describe('Overwhelm keyword', function() {
                             'partisan-insurgent',
                             'specforce-soldier',
                             { card: 'battlefield-marine', upgrades: ['shield'] }
-                        ]
+                        ],
+                        hand: ['waylay']
                     }
                 });
             });
@@ -67,6 +68,23 @@ describe('Overwhelm keyword', function() {
                 context.player1.clickCard(context.wampa);
                 context.player1.clickCard(context.partisanInsurgent);
                 expect(context.p2Base.damage).toBe(0);
+            });
+
+            it('after it was removed from play and played again it should only deal excess damage once', function() {
+                const { context } = contextRef;
+                context.player1.passAction();
+                context.player2.clickCard(context.waylay);
+                context.player2.clickCard(context.wampa);
+
+                context.player1.clickCard(context.wampa);
+                context.wampa.exhausted = false;
+                context.player2.passAction();
+
+                context.player1.clickCard(context.wampa);
+                context.player1.clickCard(context.specforceSoldier);
+                expect(context.p2Base.damage).toBe(2);
+                expect(context.wampa.damage).toBe(2);
+                expect(context.wampa.exhausted).toBe(true);
             });
         });
 

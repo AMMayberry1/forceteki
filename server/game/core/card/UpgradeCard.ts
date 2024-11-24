@@ -37,7 +37,7 @@ export class UpgradeCard extends UpgradeCardParent {
         super(owner, cardData);
         Contract.assertTrue([CardType.BasicUpgrade, CardType.TokenUpgrade].includes(this.printedType));
 
-        this.defaultActions.push(new PlayUpgradeAction(this));
+        this.defaultActions.push(new PlayUpgradeAction({ card: this }));
     }
 
     public override isUpgrade(): this is UpgradeCard {
@@ -48,7 +48,7 @@ export class UpgradeCard extends UpgradeCardParent {
         const actions = super.getActions();
 
         if (this.zoneName === ZoneName.Resource && this.hasSomeKeyword(KeywordName.Smuggle)) {
-            actions.push(new PlayUpgradeAction(this, PlayType.Smuggle));
+            actions.push(new PlayUpgradeAction({ card: this, playType: PlayType.Smuggle }));
         }
         return actions;
     }
@@ -66,11 +66,11 @@ export class UpgradeCard extends UpgradeCardParent {
         return true;
     }
 
-    public override moveTo(targetZone: MoveZoneDestination) {
+    public override moveTo(targetZone: MoveZoneDestination, resetController?: boolean) {
         Contract.assertFalse(this._parentCard && targetZone !== this._parentCard.zoneName,
             `Attempting to move upgrade ${this.internalName} while it is still attached to ${this._parentCard?.internalName}`);
 
-        super.moveTo(targetZone);
+        super.moveTo(targetZone, resetController);
     }
 
     public attachTo(newParentCard: UnitCard) {

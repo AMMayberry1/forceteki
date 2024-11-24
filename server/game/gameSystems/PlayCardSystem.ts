@@ -4,11 +4,12 @@ import { CardTargetSystem, ICardTargetSystemProperties } from '../core/gameSyste
 import { AbilityContext } from '../core/ability/AbilityContext';
 import * as Contract from '../core/utils/Contract';
 import { CardType, PlayType, MetaEventName } from '../core/Constants';
-import * as GameSystemLibrary from './GameSystemLibrary';
 import { PlayCardAction } from '../core/ability/PlayCardAction';
 import { PlayUnitAction } from '../actions/PlayUnitAction';
 import { PlayUpgradeAction } from '../actions/PlayUpgradeAction';
 import { PlayEventAction } from '../actions/PlayEventAction';
+import { TriggerHandlingMode } from '../core/event/EventWindow';
+import { CostAdjuster, ICostAdjusterProperties } from '../core/cost/CostAdjuster';
 
 export interface IPlayCardProperties extends ICardTargetSystemProperties {
     ignoredRequirements?: string[];
@@ -17,6 +18,7 @@ export interface IPlayCardProperties extends ICardTargetSystemProperties {
     optional?: boolean;
     entersReady?: boolean;
     playType?: PlayType;
+    adjustCost?: ICostAdjusterProperties;
     // TODO: implement a "nested" property that controls whether triggered abilities triggered by playing the card resolve after that card play or after the whole ability
 }
 
@@ -38,6 +40,7 @@ export class PlayCardSystem<TContext extends AbilityContext = AbilityContext> ex
     public eventHandler(event, additionalProperties): void {
         const player = event.player;
         const newContext = (event.playCardAbility as PlayCardAction).createContext(player);
+
         event.context.game.queueStep(new AbilityResolver(event.context.game, newContext, event.optional));
     }
 
@@ -51,7 +54,7 @@ export class PlayCardSystem<TContext extends AbilityContext = AbilityContext> ex
 
         super.addPropertiesToEvent(event, target, context, additionalProperties);
 
-        event.playCardAbility = this.generatePlayCardAbility(target, properties);
+        event.playCardAbility = this.generatePlayCardAbility(target, properties, context);
         event.optional = properties.optional ?? context.ability.optional;
     }
 
@@ -63,21 +66,27 @@ export class PlayCardSystem<TContext extends AbilityContext = AbilityContext> ex
         if (!super.canAffect(card, context)) {
             return false;
         }
-        const playCardAbility = this.generatePlayCardAbility(card, properties);
+
+        const playCardAbility = this.generatePlayCardAbility(card, properties, context);
         const newContext = playCardAbility.createContext(context.player);
 
         return !playCardAbility.meetsRequirements(newContext, properties.ignoredRequirements);
     }
 
+    private makeCostAdjuster(properties: ICostAdjusterProperties | null, context: TContext) {
+        return properties ? new CostAdjuster(context.game, context.source, properties) : null;
+    }
+
     /**
      * Generate a play card ability for the specified card.
      */
-    private generatePlayCardAbility(card: Card, properties) {
-        switch (card.type) {
-            case CardType.BasicUnit: return new PlayUnitAction(card, properties.playType, properties.entersReady);
-            case CardType.BasicUpgrade: return new PlayUpgradeAction(card, properties.playType);
-            case CardType.Event: return new PlayEventAction(card, properties.playType);
-            default: Contract.fail(`Attempted to play a card with invalid type ${card.type} as part of an ability`);
+    private generatePlayCardAbility(card: Card, properties: IPlayCardProperties, context: TContext) {
+        const actionProperties = { card, playType: properties.playType, triggerHandlingMode: TriggerHandlingMode.ResolvesTriggers, costAdjuster: this.makeCostAdjuster(properties.adjustCost, context) };
+        switch (actionProperties.card.type) {
+            case CardType.BasicUnit: return new PlayUnitAction({ ...actionProperties, entersReady: properties.entersReady });
+            case CardType.BasicUpgrade: return new PlayUpgradeAction(actionProperties);
+            case CardType.Event: return new PlayEventAction(actionProperties);
+            default: Contract.fail(`Attempted to play a card with invalid type ${actionProperties.card.type} as part of an ability`);
         }
     }
 }

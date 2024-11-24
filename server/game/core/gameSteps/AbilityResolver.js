@@ -133,7 +133,7 @@ class AbilityResolver extends BaseStepWithPipeline {
             return;
         }
 
-        this.cancelled = this.targetResults.cancelled;
+        this.checkTargetResultCancelState();
     }
 
     checkForCancelOrPass() {
@@ -141,12 +141,25 @@ class AbilityResolver extends BaseStepWithPipeline {
             return;
         }
 
-        if (this.passAbilityHandler && !this.passAbilityHandler.hasBeenShown) {
+        this.checkTargetResultCancelState();
+
+        if (!this.cancelled && this.passAbilityHandler && !this.passAbilityHandler.hasBeenShown) {
             this.game.queueSimpleStep(() => this.checkForPass(), 'checkForPass');
             return;
         }
+    }
 
+    checkTargetResultCancelState() {
         this.cancelled = this.targetResults.cancelled;
+
+        if (
+            !this.cancelled &&
+            this.targetResults.hasEffectiveTargets === false &&
+            (!this.context.ability.cost || this.context.ability.cost?.length === 0)
+        ) {
+            this.cancelled = true;
+            this.resolutionComplete = true;
+        }
     }
 
     // TODO: add passHandler support here

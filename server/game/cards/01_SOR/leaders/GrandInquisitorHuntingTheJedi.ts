@@ -29,11 +29,11 @@ export default class GrandInquisitorHuntingTheJedi extends LeaderUnitCard {
     protected override setupLeaderUnitSideAbilities() {
         this.addOnAttackAbility({
             title: 'Deal 1 damage to another friendly unit with 3 or less power and ready it.',
+            optional: true,
             targetResolver: {
                 controller: RelativePlayer.Self,
                 cardTypeFilter: WildcardCardType.Unit,
                 cardCondition: (card, context) => card !== context.source && card.isUnit() && card.getPower() <= 3,
-                optional: true,
                 immediateEffect: AbilityHelper.immediateEffects.sequential([
                     AbilityHelper.immediateEffects.damage((context) => ({ target: context.target, amount: 1 })),
                     AbilityHelper.immediateEffects.ready((context) => ({ target: context.target })),
