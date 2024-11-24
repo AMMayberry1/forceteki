@@ -11,7 +11,7 @@ export default class AurraSingCrackshotSniper extends NonLeaderUnitCard {
 
     public override setupCardAbilities() {
         this.addTriggeredAbility({
-            title: 'Give a Shield token to a friendly unit in the same arena as the attacker',
+            title: 'Ready when an enemy unit attack base',
             when: {
                 onAttackDeclared: (event, context) => event.attack.target === context.source.controller.base,
             },
