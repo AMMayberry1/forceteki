@@ -23,7 +23,7 @@ describe('Self-Destruct', function () {
                 expect(context.player1).toBeAbleToSelectExactly([context.pykeSentinel, context.greenSquadronAwing]);
                 context.player1.clickCard(context.pykeSentinel);
 
-                // deal 4 damage to a enemy unit
+                // deal 4 damage to an enemy unit
                 expect(context.player1).toBeAbleToSelectExactly([context.atst, context.ruthlessRaider]);
                 context.player1.clickCard(context.atst);
 
